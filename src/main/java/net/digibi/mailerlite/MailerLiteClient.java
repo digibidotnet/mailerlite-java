@@ -69,27 +69,29 @@ public class MailerLiteClient {
     public static String createUserBodyToSend(String email, Map<String, String> fields, String type) {
         JSONObject jsonObject = new JSONObject().put("email", email).put("type", type);
         if (fields != null) {
-            jsonObject.put("fields", (new JSONObject(fields)).toString());
+            jsonObject.put("fields", fields.toString());
         }
         return jsonObject.toString();
     }
     
     public HttpResponse<String> updateUserDetails(int identifier, Map<String, String> fields) {
+        JSONObject fieldsParsed = new JSONObject().put("fields", new JSONObject(fields));
         HttpResponse<String> response = Unirest
             .put(API_END_POINT + "subscribers/" + identifier)
             .header("content-type", "application/json")
             .header("x-mailerlite-apikey", API_KEY)
-            .body((new JSONObject(fields)).toString())
+            .body(fieldsParsed.toString())
             .asString();
         return response;
     }
     
     public HttpResponse<String> updateUserDetails(String identifier, Map<String, String> fields) {
+        JSONObject fieldsParsed = new JSONObject().put("fields", new JSONObject(fields));
         HttpResponse<String> response = Unirest
             .put(API_END_POINT + "subscribers/" + identifier)
             .header("content-type", "application/json")
             .header("x-mailerlite-apikey", API_KEY)
-            .body((new JSONObject(fields)).toString())
+            .body(fieldsParsed.toString())
             .asString();
         return response;
     }
